@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISC Digitalization - Executive Summary</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #6a6de3;
+            --secondary-color: #764ba2;
+            --accent-color: #34d399;
+            --bg-color: #f4f7fe;
+            --text-color: #4a5568;
+            --heading-color: #2d3748;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --card-border: rgba(255, 255, 255, 1);
+            --shadow-color: rgba(102, 126, 234, 0.2);
+            --border-color: #eef2ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><g fill="%23e0e7ff" fill-opacity="0.4"><circle cx="50" cy="50" r="4"/></g></svg>');
+        }
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); box-shadow: 0 5px 20px rgba(0,0,0,0.05); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; padding: 0 5%; height: 70px; z-index: 1000; }
+        .nav-logo { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 600; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .nav-links { list-style: none; display: flex; gap: 40px; }
+        .nav-links a { text-decoration: none; color: var(--heading-color); font-weight: 500; font-family: 'Poppins', sans-serif; font-size: 1rem; position: relative; padding: 5px 0; transition: color 0.3s ease; }
+        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--primary-gradient); transition: width 0.3s ease; }
+        .nav-links a:hover, .nav-links a.active { color: var(--secondary-color); }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .slides-container { position: relative; width: 100%; height: calc(100vh - 70px); margin-top: 70px; perspective: 1000px; }
+        .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px 40px; opacity: 0; transform: scale(0.98); transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out; visibility: hidden; }
+        .slide.active { opacity: 1; transform: scale(1); visibility: visible; z-index: 1; }
+        .slide-header { text-align: center; max-width: 900px; margin-bottom: 30px; }
+        .section-title { font-family: 'Poppins', sans-serif; font-size: 2.5rem; font-weight: 600; color: var(--heading-color); margin-bottom: 10px; }
+        .subtitle { font-size: 1.1rem; color: var(--text-color); }
+        .slide-content-wrapper { max-width: 1200px; width: 100%; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-radius: 20px; box-shadow: 0 15px 50px var(--shadow-color); overflow: hidden; }
+        .slide-indicator { position: fixed; bottom: 20px; right: 30px; background: var(--heading-color); color: white; padding: 8px 15px; border-radius: 20px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; z-index: 1001; }
+        
+        /* Dashboard Styles */
+        .total-budget-card { padding: 30px; background: linear-gradient(145deg, #5a5fdd 0%, #764ba2 100%); color: white; text-align: center; border-radius: 15px; margin: 40px; box-shadow: 0 20px 40px rgba(90, 95, 221, 0.25), inset 0 2px 4px rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .total-budget-card .label { font-size: 1.2rem; color: white; opacity: 0.9; }
+        .total-budget-card .value { font-family: 'Poppins', sans-serif; font-size: 3.5rem; color: white; line-height: 1.2; }
+        .dashboard-layout { display: grid; grid-template-columns: 1fr 1fr; padding: 0 40px 40px; }
+        .financial-column { padding-right: 40px; }
+        .chart-column { padding-left: 40px; border-left: 1px solid var(--border-color); display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
+        
+        .metric-card { background: #fff; padding: 25px; border-radius: 15px; border: 1px solid var(--border-color); margin-bottom: 25px; }
+        .metric-card.primary { background-color: #f7f9fc; }
+        .metric-card h3 { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 500; color: var(--heading-color); margin-bottom: 10px; }
+        .metric-card .value { font-family: 'Poppins', sans-serif; font-size: 2.5rem; font-weight: 600; color: var(--primary-color); line-height: 1.2; }
+        .breakdown-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border-color); }
+        .breakdown-item:last-child { border-bottom: none; }
+        .breakdown-item .label { font-size: 0.95rem; color: var(--text-color); display: flex; align-items: center; gap: 8px; }
+        .breakdown-item .value { font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 600; color: var(--heading-color); }
+
+        .chart-column h3 { font-family: 'Poppins', sans-serif; color: var(--heading-color); margin-bottom: 20px; font-size: 1.2rem; font-weight: 500; text-align: center; }
+        
+        /* Custom Chart Legend */
+        .chart-legend { display: flex; justify-content: center; gap: 25px; margin-top: 20px; }
+        .legend-item { display: flex; align-items: center; gap: 10px; }
+        .legend-color-box { width: 16px; height: 16px; border-radius: 4px; }
+        .legend-text-container { display: flex; flex-direction: column; line-height: 1.2; }
+        .legend-label { font-size: 0.9rem; color: var(--text-color); }
+        .legend-value { font-size: 0.8rem; color: var(--text-color); opacity: 0.7; }
+        .legend-percentage { font-size: 1rem; font-weight: 600; font-family: 'Poppins', sans-serif; color: var(--heading-color); }
+
+        /* Strategic Case Styles */
+        .outcomes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; padding: 40px; }
+        .outcome-card { background: #fff; padding: 25px; border-radius: 15px; border: 1px solid var(--border-color); text-align: center; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .outcome-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px var(--shadow-color); }
+        .outcome-card .icon { font-size: 2.5rem; display: block; margin-bottom: 15px; }
+        .outcome-card h3 { font-family: 'Poppins', sans-serif; font-size: 1.2rem; color: var(--heading-color); margin-bottom: 10px; }
+        .outcome-card p { font-size: 0.95rem; line-height: 1.6; }
+        .recommendation-flow { display: flex; align-items: center; justify-content: center; padding: 40px; gap: 20px; }
+        .flow-step { flex: 1; text-align: center; background: #fff; padding: 25px; border-radius: 15px; border: 1px solid var(--border-color); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .flow-step .step-label { font-size: 0.9rem; font-weight: 500; color: var(--secondary-color); margin-bottom: 5px; text-transform: uppercase; }
+        .flow-step h3 { font-family: 'Poppins', sans-serif; font-size: 1.3rem; margin-bottom: 10px; color: var(--heading-color); }
+        .flow-step p { font-size: 0.9rem; }
+        .flow-arrow { font-size: 2.5rem; color: var(--primary-color); opacity: 0.5; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="01_Executive_Summary.html" class="nav-logo">ISC Digitalization Budget 📊</a>
+        <ul class="nav-links">
+            <li><a href="01_Executive_Summary.html" class="active">1. Executive Summary</a></li>
+            <li><a href="02_Trial_Project_SCM.html">2. Trial Project (SCM)</a></li>
+            <li><a href="03_Company_Rollout.html">3. Company-Wide Rollout</a></li>
+            <li><a href="04_AI_Tools_Budget.html">4. AI & Productivity Tools</a></li>
+        </ul>
+    </nav>
+
+    <div class="slides-container">
+        <div class="slide active">
+            <div class="slide-header">
+                <h2 class="section-title">2026 Digital Transformation Budget 🚀</h2>
+                <p class="subtitle">A proposal to fund a company-wide initiative to centralize data, enhance efficiency, and build a foundation for future growth.</p>
+            </div>
+            <div class="slide-content-wrapper">
+                <div class="total-budget-card">
+                    <div class="label">Total Estimated Annual Budget</div>
+                    <div class="value" data-target="0" id="total-annual-value">$0.00</div>
+                </div>
+                <div class="dashboard-layout">
+                    <div class="financial-column">
+                        <div class="metric-card primary">
+                            <h3>Total Monthly Cost</h3>
+                            <div class="value" data-target="0" id="total-monthly-value">$0.00</div>
+                        </div>
+                        <div class="metric-card">
+                             <h3>Monthly Breakdown</h3>
+                            <div class="breakdown-item">
+                                <span class="label">☁️ Google Cloud (BigQuery)</span>
+                                <span class="value" data-target="0" id="monthly-platform-value">$0.00</span>
+                            </div>
+                             <div class="breakdown-item">
+                                <span class="label">🤖 AI & Productivity Tools</span>
+                                <span class="value" data-target="0" id="monthly-tools-value">$0.00</span>
+                            </div>
+                        </div>
+                         <div class="metric-card">
+                            <div class="breakdown-item">
+                                <span class="label">🚀 One-Time Onboarding</span>
+                                <span class="value" data-target="0" id="onboarding-cost-value">$0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-column">
+                        <h3>Annual Cost Distribution 🥧</h3>
+                        <canvas id="cost-distribution-chart" style="max-height: 280px;"></canvas>
+                        <div id="chart-legend" class="chart-legend"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="section-title">Strategic Outcomes of Investment</h2>
+            </div>
+            <div class="slide-content-wrapper">
+                <div class="outcomes-grid">
+                    <div class="outcome-card">
+                        <span class="icon">⚙️</span>
+                        <h3>Enhance Efficiency</h3>
+                        <p>Automate workflows and reduce manual data aggregation, freeing up staff for higher-value tasks.</p>
+                    </div>
+                     <div class="outcome-card">
+                        <span class="icon">✅</span>
+                        <h3>Improve Data Accuracy</h3>
+                        <p>Create a single source of truth for all departmental data, minimizing errors from disparate spreadsheets.</p>
+                    </div>
+                     <div class="outcome-card">
+                        <span class="icon">🧠</span>
+                        <h3>Enable Data-Driven Decisions</h3>
+                        <p>Provide leadership with real-time, cross-departmental insights for better strategic planning.</p>
+                    </div>
+                     <div class="outcome-card">
+                        <span class="icon">🏗️</span>
+                        <h3>Build a Future-Ready Foundation</h3>
+                        <p>Establish the core data infrastructure required for future AI and machine learning initiatives.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-header">
+                <h2 class="section-title">Recommendation & Path Forward</h2>
+            </div>
+            <div class="slide-content-wrapper">
+                <div class="recommendation-flow">
+                    <div class="flow-step">
+                        <div class="step-label">Step 1: Proven Concept</div>
+                        <h3>SCM Trial Success</h3>
+                        <p>A zero-cost trial validated the data centralization model's effectiveness and low barrier to entry.</p>
+                    </div>
+                    <div class="flow-arrow">➡️</div>
+                    <div class="flow-step" style="border-color: var(--primary-color); border-width: 2px;">
+                        <div class="step-label">Step 2: Proposed Investment</div>
+                        <h3>Approve 2026 Budget</h3>
+                        <p>The requested budget is a strategic investment in our company's operational backbone.</p>
+                    </div>
+                    <div class="flow-arrow">➡️</div>
+                    <div class="flow-step">
+                        <div class="step-label">Step 3: Future State</div>
+                        <h3>Unlock Full Potential</h3>
+                        <p>Achieve company-wide efficiency, accuracy, and data-driven growth for years to come.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="slide-indicator"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Slide Navigation ---
+            const slides = document.querySelectorAll('.slide');
+            const indicator = document.querySelector('.slide-indicator');
+            let currentSlide = 0; let isNavigating = false; const navigationTimeout = 600;
+            function showSlide(index) { slides.forEach(s => s.classList.remove('active')); slides[index].classList.add('active'); indicator.textContent = `Page ${index+1} of ${slides.length}`; }
+            function nextSlide() { currentSlide = (currentSlide + 1) % slides.length; showSlide(currentSlide); }
+            function prevSlide() { currentSlide = (currentSlide - 1 + slides.length) % slides.length; showSlide(currentSlide); }
+            document.addEventListener('keydown', (e) => { if (isNavigating) return; isNavigating = true; if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide(); else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide(); setTimeout(() => { isNavigating = false; }, navigationTimeout); });
+            document.addEventListener('wheel', (e) => { const card = e.target.closest('.slide-content-wrapper'); if (card && card.scrollHeight > card.clientHeight) return; if (isNavigating) return; isNavigating = true; if (e.deltaY > 0) nextSlide(); else prevSlide(); setTimeout(() => { isNavigating = false; }, navigationTimeout); }, { passive: false });
+
+            // --- Dashboard Logic ---
+            const formatCurrency = (num) => `$${num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            let costChart = null;
+
+            function animateCountUp(el) {
+                const target = parseFloat(el.dataset.target);
+                if (isNaN(target)) { el.textContent = formatCurrency(0); return; }
+                let frame = 0;
+                const totalFrames = 90; // Approx 1.5 seconds
+                const easeOutExpo = t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+                function update() {
+                    frame++;
+                    const progress = easeOutExpo(frame / totalFrames);
+                    const value = target * progress;
+                    if (frame < totalFrames) {
+                        el.textContent = formatCurrency(value);
+                        requestAnimationFrame(update);
+                    } else {
+                        el.textContent = formatCurrency(target);
+                    }
+                }
+                requestAnimationFrame(update);
+            }
+            
+            function updateLegend(chart) {
+                const legendContainer = document.getElementById('chart-legend');
+                const datasets = chart.data.datasets;
+                const labels = chart.data.labels;
+                if (!datasets.length || !datasets[0].data.length) return;
+
+                const total = datasets[0].data.reduce((a, b) => a + b, 0);
+                let legendHtml = '';
+
+                labels.forEach((label, index) => {
+                    const value = datasets[0].data[index];
+                    const color = datasets[0].backgroundColor[index];
+                    const percentage = total > 0 ? ((value / total) * 100).toFixed(0) : 0;
+                    legendHtml += `
+                        <div class="legend-item">
+                            <div class="legend-color-box" style="background-color: ${color}"></div>
+                            <div class="legend-text-container">
+                                <span class="legend-percentage">${percentage}%</span>
+                                <span class="legend-label">${label}</span>
+                                <span class="legend-value">${formatCurrency(value)}</span>
+                            </div>
+                        </div>`;
+                });
+                legendContainer.innerHTML = legendHtml;
+            }
+
+            function loadDataAndRender() {
+                const defaultRolloutAnnual = 398.46;
+                const defaultToolsAnnual = 719.88;
+                const defaultRolloutMonthly = 33.21;
+                const defaultToolsMonthly = 59.99;
+                const rolloutAnnual = parseFloat(localStorage.getItem('rollout_annual_cost')) || defaultRolloutAnnual;
+                const toolsAnnual = parseFloat(localStorage.getItem('tools_annual_cost')) || defaultToolsAnnual;
+                const rolloutMonthly = parseFloat(localStorage.getItem('rollout_monthly_cost')) || defaultRolloutMonthly;
+                const toolsMonthly = parseFloat(localStorage.getItem('tools_monthly_cost')) || defaultToolsMonthly;
+                const totalAnnual = rolloutAnnual + toolsAnnual;
+                const totalMonthly = rolloutMonthly + toolsMonthly;
+
+                document.getElementById('total-annual-value').dataset.target = totalAnnual;
+                document.getElementById('total-monthly-value').dataset.target = totalMonthly;
+                document.getElementById('monthly-platform-value').dataset.target = rolloutMonthly;
+                document.getElementById('monthly-tools-value').dataset.target = toolsMonthly;
+                const onboardingCost = 0;
+                document.getElementById('onboarding-cost-value').dataset.target = onboardingCost;
+                
+                document.querySelectorAll('.value[data-target]').forEach(animateCountUp);
+
+                const ctx = document.getElementById('cost-distribution-chart').getContext('2d');
+                const chartData = {
+                    labels: ['☁️ Google Cloud (BigQuery)', '🤖 AI & Productivity Tools'],
+                    datasets: [{
+                        data: [rolloutAnnual, toolsAnnual],
+                        backgroundColor: ['#6a6de3', '#34d399'],
+                        borderColor: '#f4f7fe',
+                        borderWidth: 8,
+                        hoverOffset: 4,
+                        hoverBorderColor: '#ffffff'
+                    }]
+                };
+
+                if (costChart) {
+                    costChart.data = chartData;
+                    costChart.update();
+                } else {
+                    costChart = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: chartData,
+                        options: {
+                            responsive: true,
+                            cutout: '75%',
+                            plugins: {
+                                legend: { display: false },
+                                tooltip: {
+                                    callbacks: {
+                                        label: (context) => `${context.label}: ${formatCurrency(context.parsed)}`
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+                updateLegend(costChart);
+            }
+            
+            showSlide(currentSlide);
+            loadDataAndRender();
+            window.addEventListener('storage', loadDataAndRender);
+        });
+    </script>
+</body>
+</html>

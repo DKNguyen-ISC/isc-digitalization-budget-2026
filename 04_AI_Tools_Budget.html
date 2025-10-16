@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISC Digitalization - AI & Productivity Tools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-color: #6a6de3;
+            --secondary-color: #764ba2;
+            --accent-color: #34d399;
+            --bg-color: #f4f7fe;
+            --text-color: #4a5568;
+            --heading-color: #2d3748;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(255, 255, 255, 0.95);
+            --shadow-color: rgba(102, 126, 234, 0.25);
+            --free-tier-color: #10b981;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><g fill="%23e0e7ff" fill-opacity="0.4"><circle cx="50" cy="50" r="4"/></g></svg>');
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- STYLES (abridged for brevity) --- */
+        .navbar, .nav-links, .slides-container, .slide, .slide-content-card, .slide-indicator { /* ... */ }
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); box-shadow: 0 5px 20px rgba(0,0,0,0.05); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; padding: 0 5%; height: 70px; z-index: 1000; } .nav-logo { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 600; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; } .nav-links { list-style: none; display: flex; gap: 40px; } .nav-links a { text-decoration: none; color: var(--heading-color); font-weight: 500; font-family: 'Poppins', sans-serif; font-size: 1rem; position: relative; padding: 5px 0; transition: color 0.3s ease; } .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--primary-gradient); transition: width 0.3s ease; } .nav-links a:hover, .nav-links a.active { color: var(--secondary-color); } .nav-links a:hover::after, .nav-links a.active::after { width: 100%; } .slides-container { position: relative; width: 100%; height: calc(100vh - 70px); margin-top: 70px; perspective: 1000px; } .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; padding: 20px 40px; opacity: 0; transform: scale(0.98); transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out; visibility: hidden; } .slide.active { opacity: 1; transform: scale(1); visibility: visible; z-index: 1; } .slide-content-card { max-width: 1200px; width: 100%; background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--card-border); border-radius: 20px; box-shadow: 0 15px 50px var(--shadow-color); overflow: auto; max-height: calc(100vh - 120px); padding: 40px 50px; } .slide-indicator { position: fixed; bottom: 20px; right: 30px; background: var(--heading-color); color: white; padding: 8px 15px; border-radius: 20px; font-family: 'Poppins', sans-serif; font-size: 0.9rem; z-index: 1001; }
+        .section-title { font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 600; color: var(--heading-color); margin-bottom: 30px; text-align: center; }
+        .cost-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; margin-top: 20px; } .cost-table th, .cost-table td { padding: 15px; text-align: left; border-bottom: 1px solid #e2e8f0; } .cost-table thead { background-color: rgba(244,247,254, 0.9); } .cost-table th { font-family: 'Poppins', sans-serif; color: var(--secondary-color); } .cost-table .cost { font-weight: 600; font-family: 'Poppins', sans-serif; color: var(--heading-color); text-align: right; }
+        
+        .tools-calculator-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
+        .tools-calculator-table th { text-align: left; padding: 0 15px 10px; color: var(--secondary-color); font-family: 'Poppins', sans-serif; font-size: 0.9rem; }
+        .tool-row { background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: box-shadow 0.3s ease; }
+        .tool-row:hover { box-shadow: 0 8px 25px rgba(102, 126, 234, 0.1); }
+        .tool-row td { padding: 15px; vertical-align: middle; }
+        .tool-name-cell { display: flex; align-items: center; gap: 15px; }
+        .tool-icon { width: 32px; height: 32px; flex-shrink: 0; } /* Class now applies to SVG */
+        .tool-name { font-weight: bold; font-family: 'Poppins', sans-serif; font-size: 1.1rem; color: var(--heading-color); }
+        .tool-note { font-size: 0.8rem; color: #6b7280; }
+        .tool-row select, .tool-row input { max-width: 120px; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 0.95rem; }
+        .tool-row .subtotal { font-size: 1.1rem; font-weight: 600; font-family: 'Poppins', sans-serif; color: var(--primary-color); text-align: right; }
+        .billing-toggle { display: flex; align-items: center; justify-content: center; gap: 5px; background-color: #f1f5f9; padding: 4px; border-radius: 20px; }
+        .billing-toggle label { flex: 1; text-align: center; padding: 6px 12px; border-radius: 18px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
+        .billing-toggle input[type="radio"] { display: none; }
+        .billing-toggle input[type="radio"]:checked + label { background-color: #fff; color: var(--primary-color); box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        #calculate-btn { margin-top: 20px; width: 100%; padding: 15px; border: none; border-radius: 8px; background: var(--primary-gradient); color: white; font-family: 'Poppins', sans-serif; font-size: 1.1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; }
+        #calculate-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px var(--shadow-color); }
+
+        .summary-card { text-align: center; background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px var(--shadow-color); } .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; text-align: left; } .summary-item { display: flex; align-items: center; gap: 20px; padding: 25px; border-radius: 15px; background: #f7f9fc; border: 1px solid #eef2ff; } .summary-icon { flex-shrink: 0; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; } .summary-icon svg { width: 28px; height: 28px; } .icon-monthly { background-color: #d1fae5; color: var(--accent-color); } .icon-annual { background-color: #e0e7ff; color: var(--primary-color); } .summary-text .label { font-size: 1rem; font-weight: 500; color: var(--secondary-color); } .summary-text .value { font-family: 'Poppins', sans-serif; font-size: 2.2rem; font-weight: 600; color: var(--heading-color); line-height: 1.2; } .total-summary { grid-column: 1 / -1; margin-top: 20px; padding: 25px; border-radius: 15px; background: var(--primary-gradient); color: white; text-align: center; } .total-summary .label { font-size: 1.2rem; opacity: 0.9; } .total-summary .value { font-family: 'Poppins', sans-serif; font-size: 3.2rem; font-weight: 700; color: white; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">ISC Digitalization Budget</a>
+        <ul class="nav-links">
+            <li><a href="index.html">1. Executive Summary</a></li>
+            <li><a href="02_Trial_Project_SCM.html">2. Trial Project (SCM)</a></li>
+            <li><a href="03_Company_Rollout.html">3. Company-Wide Rollout</a></li>
+            <li><a href="04_AI_Tools_Budget.html" class="active">4. AI & Productivity Tools</a></li>
+        </ul>
+    </nav>
+
+    <div class="slides-container">
+        <div class="slide active">
+            <div class="slide-content-card">
+                <h2 class="section-title">AI & Productivity Tools Budget</h2>
+                
+                <div style="display: flex; justify-content: flex-end; align-items: center; margin-bottom: 20px; gap: 10px;">
+                    <span style="font-weight: 500; color: var(--secondary-color);">Switch All To:</span>
+                    <div class="billing-toggle" id="global-billing-toggle" style="width: 200px;">
+                        <input type="radio" id="global-monthly" name="global-billing" value="monthly">
+                        <label for="global-monthly">Monthly</label>
+                        <input type="radio" id="global-annual" name="global-billing" value="annual" checked>
+                        <label for="global-annual">Annual</label>
+                    </div>
+                </div>
+
+                <table class="tools-calculator-table" id="tools-calculator">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Tool</th>
+                            <th style="width: 15%;">Plan</th>
+                            <th style="width: 10%;">Accounts</th>
+                            <th style="width: 20%;">Billing Cycle</th>
+                            <th style="width: 15%;">Notes</th>
+                            <th style="width: 15%; text-align: right;">Subtotal / month</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="tool-row" id="tango-row">
+                            <td>
+                                <div class="tool-name-cell">
+                                    <svg class="tool-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24.2637 0.932617L47.0674 12.8665V36.7342L24.2637 47.0672L1.45996 36.7342V12.8665L24.2637 0.932617Z" fill="#F47F23"></path><path d="M24.2637 4.5332L42.5323 13.931V35.4328L24.2637 43.4666L6.00195 35.4328V13.931L24.2637 4.5332Z" fill="white"></path><path d="M11.9678 16.6162H36.5664V20.2168H26.8499V31.3838H21.6858V20.2168H11.9678V16.6162Z" fill="#F47F23"></path></svg>
+                                    <div class="tool-name">Tango</div>
+                                </div>
+                            </td>
+                            <td><select class="plan-selector"><option value="pro" selected>Pro</option><option value="free">Free</option></select></td>
+                            <td><input type="number" class="account-input" value="1" min="0"></td>
+                            <td>
+                                <div class="billing-toggle">
+                                    <input type="radio" id="tango-monthly" name="tango-billing" value="monthly"><label for="tango-monthly">Monthly</label>
+                                    <input type="radio" id="tango-annual" name="tango-billing" value="annual" checked><label for="tango-annual">Annual</label>
+                                </div>
+                            </td>
+                            <td><div class="tool-note">Shared by 50 staff</div></td>
+                            <td class="subtotal" id="tango-subtotal">$22.00</td>
+                        </tr>
+                        <tr class="tool-row" id="gamma-row">
+                            <td>
+                                <div class="tool-name-cell">
+                                    <svg class="tool-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4.5 3.5C5.05228 3.5 5.5 3.94772 5.5 4.5V19.5C5.5 20.0523 5.05228 20.5 4.5 20.5H4C3.44772 20.5 3 20.0523 3 19.5V4.5C3 3.94772 3.44772 3.5 4 3.5H4.5Z" fill="#3B82F6"></path><path d="M10.5 3.5C11.0523 3.5 11.5 3.94772 11.5 4.5V19.5C11.5 20.0523 11.0523 20.5 10.5 20.5H10C9.44772 20.5 9 20.0523 9 19.5V4.5C9 3.94772 9.44772 3.5 10 3.5H10.5Z" fill="#3B82F6" fill-opacity="0.6"></path><path d="M20.5 3.5C21.0523 3.5 21.5 3.94772 21.5 4.5V19.5C21.5 20.0523 21.0523 20.5 20.5 20.5H20C19.4477 20.5 19 20.0523 19 19.5V4.5C19 3.94772 19.4477 3.5 20 3.5H20.5Z" fill="#3B82F6" fill-opacity="0.3"></path></svg>
+                                    <div class="tool-name">Gamma</div>
+                                </div>
+                            </td>
+                            <td><select class="plan-selector"><option value="pro" selected>Pro</option><option value="free">Free</option></select></td>
+                            <td><input type="number" class="account-input" value="1" min="0"></td>
+                            <td>
+                                <div class="billing-toggle">
+                                    <input type="radio" id="gamma-monthly" name="gamma-billing" value="monthly"><label for="gamma-monthly">Monthly</label>
+                                    <input type="radio" id="gamma-annual" name="gamma-billing" value="annual" checked><label for="gamma-annual">Annual</label>
+                                </div>
+                            </td>
+                            <td><div class="tool-note">Shared by 50 staff</div></td>
+                            <td class="subtotal" id="gamma-subtotal">$18.00</td>
+                        </tr>
+                        <tr class="tool-row" id="gemini-row">
+                            <td>
+                                <div class="tool-name-cell">
+                                    <svg class="tool-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.5,12.5C6.5,13.88,7.62,15,9,15H15V17H9C6.52,17,4.5,15.21,4.5,12.75C4.5,10.29,6.52,8.5,9,8.5H15V10.5H9C7.62,10.5,6.5,11.62,6.5,12.5M19.5,12.5C19.5,11.12,18.38,10,17,10H11V8H17C19.48,8,21.5,9.79,21.5,12.25C21.5,14.71,19.48,16.5,17,16.5H11V14.5H17C18.38,14.5,19.5,13.38,19.5,12.5M2,12L4.33,9.67L5.5,10.84L4.34,12L5.5,13.16L4.33,14.33L2,12M20.5,12L18.67,9.67L17.5,10.84L18.66,12L17.5,13.16L18.67,14.33L20.5,12Z" fill="#4285F4"></path></svg>
+                                    <div class="tool-name">Gemini</div>
+                                </div>
+                            </td>
+                            <td><select class="plan-selector"><option value="standard" selected>AI Premium</option><option value="free">Free</option></select></td>
+                            <td><input type="number" class="account-input" value="1" min="0"></td>
+                            <td>
+                                <div class="billing-toggle">
+                                    <input type="radio" id="gemini-monthly" name="gemini-billing" value="monthly" checked><label for="gemini-monthly">Monthly</label>
+                                    <input type="radio" id="gemini-annual" name="gemini-billing" value="annual"><label for="gemini-annual">Annual</label>
+                                </div>
+                            </td>
+                            <td><div class="tool-note">1 acc / up to 5 users</div></td>
+                            <td class="subtotal" id="gemini-subtotal">$19.99</td>
+                        </tr>
+                        <tr class="tool-row" id="notebooklm-row">
+                            <td>
+                                <div class="tool-name-cell">
+                                    <svg class="tool-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M4 3C4 2.44772 4.44772 2 5 2H19C19.5523 2 20 2.44772 20 3V21C20 21.5523 19.5523 22 19 22H5C4.44772 22 4 21.5523 4 21V3ZM6 4V20H18V4H6ZM8 6H16V8H8V6ZM8 10H16V12H8V10Z" fill="#4A5568"></path><path d="M12.5 14.5L14 16L12.5 17.5" stroke="#4285F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                                    <div class="tool-name">NotebookLM</div>
+                                </div>
+                            </td>
+                            <td><select class="plan-selector" disabled><option value="free" selected>Free</option></select></td>
+                            <td><input type="number" class="account-input" value="1" min="0" disabled></td>
+                            <td></td>
+                            <td><div class="tool-note">Included w/ Workspace</div></td>
+                            <td class="subtotal" id="notebooklm-subtotal">$0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+                 <button id="calculate-btn">View Cost Summary</button>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content-card">
+                <h2 class="section-title">Detailed Cost Breakdown</h2>
+                <table class="cost-table">
+                    <thead>
+                        <tr>
+                            <th>Tool</th>
+                            <th>Plan</th>
+                            <th>Billing</th>
+                            <th>Accounts</th>
+                            <th>Cost / Acct / Mo</th>
+                            <th class="cost">Subtotal / month</th>
+                            <th class="cost">Subtotal / year</th>
+                        </tr>
+                    </thead>
+                    <tbody id="breakdown-table-body">
+                        </tbody>
+                    <tfoot>
+                        <tr style="border-top: 2px solid var(--primary-color); font-size: 1.1rem; font-weight: bold;">
+                            <td colspan="5">Total (as configured)</td>
+                            <td class="cost" id="breakdown-total-monthly">$0.00</td>
+                            <td class="cost" id="breakdown-total-annual">$0.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="slide-content-card">
+                 <h2 class="section-title">📊 Financial Summary (AI Tools)</h2>
+                <div class="summary-card">
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <div class="summary-icon icon-monthly">
+                               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.75A.75.75 0 013 4.5h.75m0 0h.75A.75.75 0 005.25 6v-.75m0 0V4.5A.75.75 0 004.5 3h-.75m0 0h-.75A.75.75 0 002.25 4.5v.75M6 13.5V12m0 1.5V12m0 1.5v-1.5m0 0H4.5m1.5 0H7.5m-1.5 0V12m0 1.5V12m0 1.5c-1.5 0-2.625-.904-2.625-2.125 0-.624.28-1.135.688-1.5C5.062 9.01 5.5 8.5 6 8.5c.5 0 .938.51 1.313 1.125.407.465.687.976.687 1.625 0 1.22-.937 2.125-2.25 2.125z" /></svg>
+                            </div>
+                            <div class="summary-text">
+                                <div class="label">Total Monthly Cost</div>
+                                <div class="value" data-final-value="0" id="summary-monthly-cost">$0.00</div>
+                            </div>
+                        </div>
+                         <div class="summary-item">
+                            <div class="summary-icon icon-annual">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0h18M12 15.75h.008v.008H12v-.008z" /></svg>
+                            </div>
+                             <div class="summary-text">
+                                <div class="label">Total Annual Cost</div>
+                                <div class="value" data-final-value="0" id="summary-annual-cost">$0.00</div>
+                            </div>
+                        </div>
+                        <div class="total-summary">
+                            <div class="label">Potential Annual Savings</div>
+                            <div class="value" data-final-value="0" id="summary-annual-savings">$0.00</div>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </div>
+    </div>
+    
+    <div class="slide-indicator"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Variable declarations & Helper Functions (abridged) ---
+            const slides = document.querySelectorAll('.slide');
+            const indicator = document.querySelector('.slide-indicator');
+            const calculateBtn = document.getElementById('calculate-btn');
+            let currentSlide = 0; let isNavigating = false; const navigationTimeout = 600;
+
+            const PRICING_DATA = {
+                tango: { pro: { monthly: 26, annual: 22 }, free: { monthly: 0, annual: 0 } },
+                gamma: { pro: { monthly: 25, annual: 18 }, free: { monthly: 0, annual: 0 } },
+                gemini: { standard: { monthly: 19.99, annual: 19.99 }, free: { monthly: 0, annual: 0 } },
+                notebooklm: { free: { monthly: 0, annual: 0 } }
+            };
+            const formatCurrency = (num) => `$${num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+            function calculateAll() {
+                let totalMonthlyBreakdown = 0;
+                let totalAnnualBreakdown = 0;
+                let totalMonthlyIfAllMonthly = 0;
+                let totalMonthlyIfAllAnnual = 0;
+                const breakdownBody = document.getElementById('breakdown-table-body');
+                breakdownBody.innerHTML = '';
+
+                const toolRows = document.querySelectorAll('.tool-row');
+                toolRows.forEach(row => {
+                    const toolId = row.id.replace('-row', '');
+                    if (!PRICING_DATA[toolId]) return;
+                    
+                    const plan = row.querySelector('.plan-selector').value;
+                    const accounts = parseInt(row.querySelector('.account-input').value) || 0;
+                    const billingCycle = row.querySelector('input[type="radio"]:checked')?.value || 'annual';
+                    
+                    if (!PRICING_DATA[toolId][plan]) return;
+
+                    const prices = PRICING_DATA[toolId][plan];
+                    const costPerAccountMonthly = prices.monthly;
+                    const costPerAccountAnnual = prices.annual;
+                    
+                    const costForCurrentCycle = (billingCycle === 'monthly') ? costPerAccountMonthly : costPerAccountAnnual;
+                    const subtotalForCurrentCycle = costForCurrentCycle * accounts;
+
+                    const subtotalEl = document.getElementById(`${toolId}-subtotal`);
+                    if (subtotalEl) subtotalEl.textContent = formatCurrency(subtotalForCurrentCycle);
+                    
+                    totalMonthlyBreakdown += subtotalForCurrentCycle;
+                    totalAnnualBreakdown += subtotalForCurrentCycle * 12;
+
+                    totalMonthlyIfAllMonthly += costPerAccountMonthly * accounts;
+                    totalMonthlyIfAllAnnual += costPerAccountAnnual * accounts;
+
+                    if (plan !== 'free' && accounts > 0) {
+                        const breakdownRow = `
+                            <tr>
+                                <td>${row.querySelector('.tool-name').textContent}</td>
+                                <td>${plan.charAt(0).toUpperCase() + plan.slice(1)}</td>
+                                <td>${billingCycle.charAt(0).toUpperCase() + billingCycle.slice(1)}</td>
+                                <td>${accounts}</td>
+                                <td>${formatCurrency(costForCurrentCycle)}</td>
+                                <td class="cost">${formatCurrency(subtotalForCurrentCycle)}</td>
+                                <td class="cost">${formatCurrency(subtotalForCurrentCycle * 12)}</td>
+                            </tr>
+                        `;
+                        breakdownBody.innerHTML += breakdownRow;
+                    }
+                });
+
+                document.getElementById('breakdown-total-monthly').textContent = formatCurrency(totalMonthlyBreakdown);
+                document.getElementById('breakdown-total-annual').textContent = formatCurrency(totalAnnualBreakdown);
+
+                document.getElementById('summary-monthly-cost').dataset.finalValue = totalMonthlyIfAllMonthly;
+                document.getElementById('summary-annual-cost').dataset.finalValue = totalMonthlyIfAllAnnual * 12;
+                document.getElementById('summary-annual-savings').dataset.finalValue = (totalMonthlyIfAllMonthly * 12) - (totalMonthlyIfAllAnnual * 12);
+            
+                localStorage.setItem('tools_monthly_cost', totalMonthlyBreakdown);
+                localStorage.setItem('tools_annual_cost', totalAnnualBreakdown);
+            
+            }
+
+            // --- Event Listeners & Navigation (abridged) ---
+            document.getElementById('tools-calculator').addEventListener('input', calculateAll);
+            document.getElementById('tools-calculator').addEventListener('change', calculateAll);
+            document.getElementById('global-billing-toggle').addEventListener('change', (e) => { const selectedCycle = e.target.value; document.querySelectorAll('.tool-row .billing-toggle').forEach(toggle => { const radio = toggle.querySelector(`input[value="${selectedCycle}"]`); if (radio) radio.checked = true; }); calculateAll(); });
+            function animateCountUp(el) { const endValue = parseFloat(el.dataset.finalValue); if(isNaN(endValue)) return; const duration = 1200; let startTimestamp = null; const step = (timestamp) => { if (!startTimestamp) startTimestamp = timestamp; const progress = Math.min((timestamp - startTimestamp) / duration, 1); el.textContent = formatCurrency(progress * endValue); if (progress < 1) window.requestAnimationFrame(step); }; window.requestAnimationFrame(step); }
+            function showSlide(index) { slides.forEach(slide => slide.classList.remove('active')); slides[index].classList.add('active'); indicator.textContent = `${index + 1} / ${slides.length}`; if (index === 2) { calculateAll(); animateCountUp(document.getElementById('summary-monthly-cost')); animateCountUp(document.getElementById('summary-annual-cost')); animateCountUp(document.getElementById('summary-annual-savings')); } }
+            function nextSlide() { currentSlide = (currentSlide + 1) % slides.length; showSlide(currentSlide); }
+            function prevSlide() { currentSlide = (currentSlide - 1 + slides.length) % slides.length; showSlide(currentSlide); }
+            calculateBtn.addEventListener('click', nextSlide);
+            document.addEventListener('keydown', (e) => { if (document.activeElement.tagName === 'INPUT') return; if (isNavigating) return; isNavigating = true; if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide(); else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide(); setTimeout(() => { isNavigating = false; }, navigationTimeout); });
+            document.addEventListener('wheel', (e) => { const card = e.target.closest('.slide-content-card'); if (card && card.scrollHeight > card.clientHeight) return; if (isNavigating) return; isNavigating = true; if (e.deltaY > 0) nextSlide(); else prevSlide(); setTimeout(() => { isNavigating = false; }, navigationTimeout); }, { passive: false });
+            
+            showSlide(currentSlide);
+            calculateAll();
+        });
+    </script>
+</body>
+</html>
