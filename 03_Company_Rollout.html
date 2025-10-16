@@ -32,13 +32,47 @@
             overflow: hidden;
         }
 
-        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); box-shadow: 0 5px 20px rgba(0,0,0,0.05); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; padding: 0 5%; height: 70px; z-index: 1000; }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--primary-gradient);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            height: 70px;
+            z-index: 1000;
+            border-bottom: none;
+        }
+        .navbar .nav-logo,
+        .navbar .nav-links a {
+            color: white;
+            -webkit-text-fill-color: white;
+        }
         .nav-logo { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 600; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
         .nav-links { list-style: none; display: flex; gap: 40px; }
-        .nav-links a { text-decoration: none; color: var(--heading-color); font-weight: 500; font-family: 'Poppins', sans-serif; font-size: 1rem; position: relative; padding: 5px 0; transition: color 0.3s ease; }
-        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--primary-gradient); transition: width 0.3s ease; }
-        .nav-links a:hover, .nav-links a.active { color: var(--secondary-color); }
-        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            position: relative;
+            padding: 8px 18px;
+            border-radius: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .nav-links a:hover, 
+        .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .nav-links a::after {
+            display: none;
+        }
+
         .slides-container { position: relative; width: 100%; height: calc(100vh - 70px); margin-top: 70px; perspective: 1000px; }
         .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; padding: 20px 40px; opacity: 0; transform: scale(0.98); transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out; visibility: hidden; }
         .slide.active { opacity: 1; transform: scale(1); visibility: visible; z-index: 1; }
@@ -111,34 +145,51 @@
         .tooltip-container { position: relative; display: inline-flex; align-items: center; }
         .info-icon { display: inline-block; width: 18px; height: 18px; border-radius: 50%; background-color: #94a3b8; color: white; text-align: center; font-size: 13px; font-style: normal; font-weight: bold; line-height: 18px; cursor: help; margin-left: 8px; transition: background-color 0.2s; }
         .tooltip-container:hover .info-icon { background-color: var(--secondary-color); }
-        .tooltip-content {
-            visibility: hidden; opacity: 0;
-            position: absolute;
-            bottom: 140%; left: 50%;
-            transform: translateX(-50%);
-            background-color: #374151;
-            color: #fff;
-            padding: 10px 15px;
-            border-radius: 8px;
-            width: 300px;
-            font-size: 0.85rem;
-            font-style: normal;
-            line-height: 1.6;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: opacity 0.3s, visibility 0.3s;
-            z-index: 10;
-        }
+        .tooltip-content { visibility: hidden; opacity: 0; position: absolute; bottom: 140%; left: 50%; transform: translateX(-50%); background-color: #374151; color: #fff; padding: 10px 15px; border-radius: 8px; width: 300px; font-size: 0.85rem; font-style: normal; line-height: 1.6; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: opacity 0.3s, visibility 0.3s; z-index: 10; }
         .tooltip-content .tip { font-style: italic; color: #d1d5db; border-top: 1px solid #4b5563; margin-top: 8px; padding-top: 8px; }
-        .tooltip-content::after {
-            content: "";
-            position: absolute;
-            top: 100%; left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: #374151 transparent transparent transparent;
-        }
+        .tooltip-content::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #374151 transparent transparent transparent; }
         .tooltip-container:hover .tooltip-content { visibility: visible; opacity: 1; }
+
+        .continue-button {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 24px;
+            background: var(--primary-gradient);
+            color: white;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            border-radius: 25px;
+            box-shadow: 0 8px 15px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        .continue-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* --- RESPONSIVE DESIGN STYLES --- */
+        @media (max-width: 1024px) {
+            .slide-content-card { padding: 30px; }
+            .nav-links { gap: 25px; }
+        }
+
+        @media (max-width: 768px) {
+            body { height: auto; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+            .navbar { height: auto; padding: 10px 15px; flex-direction: column; }
+            .nav-links { margin-top: 10px; flex-wrap: wrap; justify-content: center; gap: 10px 20px; }
+            .nav-links a { font-size: 0.9rem; }
+            .slides-container { margin-top: 110px; height: auto; perspective: none; }
+            .slide { position: relative; height: auto; opacity: 1; transform: none; visibility: visible; display: block; padding: 15px; margin-bottom: 30px; }
+            .slide:not(.active) { display: none; }
+            .slide-content-card { padding: 20px; max-height: none; }
+            .slide-indicator { display: none; }
+            .calculator-layout, .breakdown-grid, .summary-grid { grid-template-columns: 1fr; }
+            .section-title { font-size: 1.7rem; }
+            .total-annual-budget .value { font-size: 2.8rem; }
+            .breakdown-item .value { font-size: 1.5rem; }
+        }
+
     </style>
 </head>
 <body>
@@ -339,6 +390,7 @@
                             <div class="value" data-final-value="0" id="summary-cost-per-day">$0.00</div>
                         </div>
                     </div>
+                    <a href="04_AI_Tools_Budget.html" class="continue-button">Continue to AI & Productivity Tools &rarr;</a>
                 </div>
              </div>
         </div>
@@ -348,6 +400,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Guided Path Navigation Setup
+            const pages = [
+                'index.html',
+                '02_Trial_Project_SCM.html',
+                '03_Company_Rollout.html',
+                '04_AI_Tools_Budget.html'
+            ];
+            const pathParts = window.location.pathname.split('/');
+            const currentPageName = pathParts.pop() || 'index.html';
+            const currentPageIndex = pages.findIndex(p => p.includes(currentPageName));
+
+            // Slide Navigation
             const slides = document.querySelectorAll('.slide');
             const indicator = document.querySelector('.slide-indicator');
             const calculateBtn = document.getElementById('calculate-btn');
@@ -363,14 +427,12 @@
             }
 
             function updateAllCalculations() {
-                // 1. Get Data Definition Inputs
+                // ... (All of the original calculator logic is preserved here)
                 const selectedDeptCount = document.querySelectorAll('.dept-checkbox:checked').length;
                 const tablesPerDept = parseFormattedNumber(document.getElementById('tables-per-dept').value);
                 const numCols = parseFormattedNumber(document.getElementById('num-cols').value);
                 const avgInitialRowsPerTable = parseFormattedNumber(document.getElementById('avg-initial-rows').value);
                 const avgMonthlyGrowthRowsPerTable = parseFormattedNumber(document.getElementById('avg-monthly-growth-rows').value);
-                
-                // 2. Calculate Total Data Size
                 const totalInitialRows = avgInitialRowsPerTable * tablesPerDept * selectedDeptCount;
                 const totalMonthlyGrowthRows = avgMonthlyGrowthRowsPerTable * tablesPerDept * selectedDeptCount;
                 const AVG_BYTES_PER_CELL = 50;
@@ -378,27 +440,20 @@
                 const initialStorageGB = (totalInitialRows * calculatedRowSizeBytes) / (1024**3);
                 const monthlyGrowthGB = (totalMonthlyGrowthRows * calculatedRowSizeBytes) / (1024**3);
                 const totalMonthlyStorageGB = initialStorageGB + monthlyGrowthGB;
-
-                // 3. Get Usage Pattern Inputs
                 const genScansPerDay = parseFormattedNumber(document.getElementById('gen-scans-per-day').value);
                 const workDays = parseFormattedNumber(document.getElementById('work-days').value);
                 const manualQueriesPerUser = parseFormattedNumber(document.getElementById('manual-queries-per-user').value);
                 const activeUsers = parseFormattedNumber(document.getElementById('active-users').value);
                 const syncsPerDay = parseFormattedNumber(document.getElementById('syncs-per-day').value);
-
-                // 4. Calculate Total Monthly Data Scanned
-                const generationGB = (genScansPerDay * workDays) * totalMonthlyStorageGB * 1.0; // 100% scan
-                const manualQueriesGB = (manualQueriesPerUser * activeUsers * workDays) * totalMonthlyStorageGB * 0.1; // 10% scan
-                const syncGB = (syncsPerDay * workDays) * totalMonthlyStorageGB * 1.0; // 100% scan
+                const generationGB = (genScansPerDay * workDays) * totalMonthlyStorageGB * 1.0;
+                const manualQueriesGB = (manualQueriesPerUser * activeUsers * workDays) * totalMonthlyStorageGB * 0.1;
+                const syncGB = (syncsPerDay * workDays) * totalMonthlyStorageGB * 1.0;
                 const monthlyQueriesGB = generationGB + manualQueriesGB + syncGB;
                 const monthlyQueriesTB = monthlyQueriesGB / 1024;
-                
-                // 5. Calculate Final Costs
                 const STORAGE_PRICE_PER_GB_MONTH = 0.02;
                 const QUERY_PRICE_PER_TB = 6.25;
                 const FREE_STORAGE_GB = 10;
                 const FREE_QUERY_TB = 1;
-
                 const grossStorageCost = totalMonthlyStorageGB * STORAGE_PRICE_PER_GB_MONTH;
                 const storageFreeTierCredit = Math.min(totalMonthlyStorageGB, FREE_STORAGE_GB) * STORAGE_PRICE_PER_GB_MONTH;
                 const netStorageCost = Math.max(0, grossStorageCost - storageFreeTierCredit);
@@ -407,21 +462,17 @@
                 const netQueryCost = Math.max(0, grossQueryCost - queryFreeTierCredit);
                 const onboardingCost = 0;
                 const totalMonthlyPlatformCost = netStorageCost + netQueryCost;
-
-                // 6. UPDATE ALL UI ELEMENTS
+                
                 document.getElementById('selected-dept-count').textContent = formatWithCommas(selectedDeptCount);
                 document.getElementById('total-data-size-gb').textContent = `${totalMonthlyStorageGB.toFixed(4)} GB`;
                 document.getElementById('total-data-size-formula').textContent = `(${initialStorageGB.toFixed(4)} GB + ${monthlyGrowthGB.toFixed(4)} GB)`;
                 document.getElementById('initial-size-breakdown').textContent = `Initial: (${formatWithCommas(avgInitialRowsPerTable)} rows × ${formatWithCommas(tablesPerDept)} tbls × ${selectedDeptCount} depts) × ${calculatedRowSizeBytes.toFixed(0)} B/row`;
                 document.getElementById('growth-size-breakdown').textContent = `Growth: (${formatWithCommas(avgMonthlyGrowthRowsPerTable)} rows × ${formatWithCommas(tablesPerDept)} tbls × ${selectedDeptCount} depts) × ${calculatedRowSizeBytes.toFixed(0)} B/row`;
-                
                 document.getElementById('total-scanned-data-live').textContent = monthlyQueriesTB < 1 ? `${monthlyQueriesGB.toFixed(2)} GB` : `${monthlyQueriesTB.toFixed(2)} TB`;
                 document.getElementById('calculated-scanned-gb').textContent = monthlyQueriesTB < 1 ? `${monthlyQueriesGB.toFixed(2)} GB` : `${monthlyQueriesTB.toFixed(2)} TB`;
-
                 document.getElementById('onboarding-dept-count').textContent = formatWithCommas(selectedDeptCount);
                 document.getElementById('onboarding-rows-formula').textContent = `${formatWithCommas(avgInitialRowsPerTable)} rows/tbl × ${formatWithCommas(tablesPerDept)} tbls/dept × ${selectedDeptCount} depts = ${formatWithCommas(totalInitialRows)} total rows`;
                 document.getElementById('onboarding-cost').textContent = formatCurrency(onboardingCost);
-
                 document.getElementById('storage-gross-calc').textContent = `(${totalMonthlyStorageGB.toFixed(4)} GB * ${formatCurrency(STORAGE_PRICE_PER_GB_MONTH)}/GB)`;
                 document.getElementById('storage-gross-cost').textContent = formatCurrency(grossStorageCost);
                 document.getElementById('storage-free-calc').textContent = `(${Math.min(totalMonthlyStorageGB, FREE_STORAGE_GB).toFixed(4)} of ${FREE_STORAGE_GB} GB free)`;
@@ -433,21 +484,18 @@
                 document.getElementById('query-free-credit').textContent = `-${formatCurrency(queryFreeTierCredit)}`;
                 document.getElementById('query-net-cost').textContent = formatCurrency(netQueryCost);
                 document.getElementById('total-monthly-cost').textContent = formatCurrency(totalMonthlyPlatformCost);
-                
                 document.getElementById('summary-dept-count').textContent = formatWithCommas(selectedDeptCount);
                 const totalAnnualCost = totalMonthlyPlatformCost * 12;
                 const costPerDept = selectedDeptCount > 0 ? totalMonthlyPlatformCost / selectedDeptCount : 0;
                 const costPerUser = activeUsers > 0 ? totalMonthlyPlatformCost / activeUsers : 0;
                 const costPerDay = workDays > 0 ? totalMonthlyPlatformCost / workDays : 0;
                 document.getElementById('summary-total-annual-cost').dataset.finalValue = totalAnnualCost;
-                document.getElementById('summary-monthly-cost').dataset.finalValue = totalMonthlyPlatformCost; // New Line
+                document.getElementById('summary-monthly-cost').dataset.finalValue = totalMonthlyPlatformCost;
                 document.getElementById('summary-cost-per-dept').dataset.finalValue = costPerDept;
                 document.getElementById('summary-cost-per-user').dataset.finalValue = costPerUser;
                 document.getElementById('summary-cost-per-day').dataset.finalValue = costPerDay;
-                
                 localStorage.setItem('rollout_monthly_cost', totalMonthlyPlatformCost);
                 localStorage.setItem('rollout_annual_cost', totalAnnualCost);
-
             }
             
             function animateCountUp(el) { 
@@ -468,18 +516,36 @@
                 slides.forEach(slide => slide.classList.remove('active'));
                 slides[index].classList.add('active');
                 indicator.textContent = `${index + 1} / ${slides.length}`; 
-                if (index === 3) {
-                    updateAllCalculations(); // Ensure values are up-to-date before animating
+                if (index === 3) { // Summary slide is now the 4th slide (index 3)
+                    updateAllCalculations(); 
                     animateCountUp(document.getElementById('summary-total-annual-cost'));
-                    animateCountUp(document.getElementById('summary-monthly-cost')); // New Line
+                    animateCountUp(document.getElementById('summary-monthly-cost'));
                     animateCountUp(document.getElementById('summary-cost-per-dept'));
                     animateCountUp(document.getElementById('summary-cost-per-user'));
                     animateCountUp(document.getElementById('summary-cost-per-day'));
                 }
             }
 
-            function nextSlide() { currentSlide = (currentSlide + 1) % slides.length; showSlide(currentSlide); }
-            function prevSlide() { currentSlide = (currentSlide - 1 + slides.length) % slides.length; showSlide(currentSlide); }
+            function nextSlide() {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                } else {
+                    if (currentPageIndex < pages.length - 1) {
+                        window.location.href = pages[currentPageIndex + 1];
+                    }
+                }
+            }
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                } else {
+                    if (currentPageIndex > 0) {
+                        window.location.href = pages[currentPageIndex - 1];
+                    }
+                }
+            }
             
             function handleStepper(e) {
                 const button = e.target.closest('.stepper-up, .stepper-down');
@@ -502,7 +568,6 @@
             allInputs.forEach(input => {
                 input.addEventListener('input', (e) => { 
                     if (e.target.type !== 'checkbox') {
-                        // This check prevents reformatting numbers as you type, only on blur or value change
                         if(e.target.value.endsWith(',')) return;
                         formatInput(e.target);
                     }
