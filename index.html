@@ -31,13 +31,48 @@
             color: var(--text-color);
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><g fill="%23e0e7ff" fill-opacity="0.4"><circle cx="50" cy="50" r="4"/></g></svg>');
         }
-        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); box-shadow: 0 5px 20px rgba(0,0,0,0.05); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; padding: 0 5%; height: 70px; z-index: 1000; }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--primary-gradient); /* Use the main theme gradient */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); /* A slightly stronger shadow for depth */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            height: 70px;
+            z-index: 1000;
+            border-bottom: none; /* No longer needed with the solid background */
+        }
+        .navbar .nav-logo,
+        .navbar .nav-links a {
+            color: white;
+            -webkit-text-fill-color: white; /* This overrides the gradient color on your logo */
+        }
         .nav-logo { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 600; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
         .nav-links { list-style: none; display: flex; gap: 40px; }
-        .nav-links a { text-decoration: none; color: var(--heading-color); font-weight: 500; font-family: 'Poppins', sans-serif; font-size: 1rem; position: relative; padding: 5px 0; transition: color 0.3s ease; }
-        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--primary-gradient); transition: width 0.3s ease; }
-        .nav-links a:hover, .nav-links a.active { color: var(--secondary-color); }
-        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            position: relative;
+            padding: 8px 18px; /* Add padding to create space for the pill */
+            border-radius: 20px; /* Rounded corners for the pill */
+            transition: background-color 0.3s ease;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+        }
+        .nav-links a::after {
+            display: none;
+        }
+
         .slides-container { position: relative; width: 100%; height: calc(100vh - 70px); margin-top: 70px; perspective: 1000px; }
         .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px 40px; opacity: 0; transform: scale(0.98); transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out; visibility: hidden; }
         .slide.active { opacity: 1; transform: scale(1); visibility: visible; z-index: 1; }
@@ -66,7 +101,6 @@
 
         .chart-column h3 { font-family: 'Poppins', sans-serif; color: var(--heading-color); margin-bottom: 20px; font-size: 1.2rem; font-weight: 500; text-align: center; }
         
-        /* Custom Chart Legend */
         .chart-legend { display: flex; justify-content: center; gap: 25px; margin-top: 20px; }
         .legend-item { display: flex; align-items: center; gap: 10px; }
         .legend-color-box { width: 16px; height: 16px; border-radius: 4px; }
@@ -88,6 +122,56 @@
         .flow-step h3 { font-family: 'Poppins', sans-serif; font-size: 1.3rem; margin-bottom: 10px; color: var(--heading-color); }
         .flow-step p { font-size: 0.9rem; }
         .flow-arrow { font-size: 2.5rem; color: var(--primary-color); opacity: 0.5; }
+
+        /* --- NEW: Style for the Continue Button --- */
+        .continue-button {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 24px;
+            background: var(--primary-gradient);
+            color: white;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            border-radius: 25px;
+            box-shadow: 0 8px 15px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        .continue-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* --- Card Sizing & Scroll Fix --- */
+        .slide-content-wrapper {
+            overflow-y: auto;
+            max-height: calc(100vh - 220px);
+        }
+        
+        /* --- RESPONSIVE DESIGN STYLES --- */
+        @media (max-width: 1024px) {
+            .slide-content-wrapper { padding: 30px; }
+            .nav-links { gap: 25px; }
+        }
+
+        @media (max-width: 768px) {
+            body { height: auto; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+            .navbar { height: auto; padding: 10px 15px; flex-direction: column; }
+            .nav-links { margin-top: 10px; flex-wrap: wrap; justify-content: center; gap: 10px 20px; }
+            .nav-links a { font-size: 0.9rem; }
+            .slides-container { margin-top: 110px; height: auto; perspective: none; }
+            .slide { position: relative; height: auto; opacity: 1; transform: none; visibility: visible; display: block; padding: 15px; margin-bottom: 30px; }
+            .slide:not(.active) { display: none; }
+            .slide-content-wrapper { padding: 20px; max-height: none; }
+            .slide-indicator { display: none; }
+            .dashboard-layout, .summary-grid, .outcomes-grid, .breakdown-grid { grid-template-columns: 1fr; }
+            .dashboard-layout .chart-column { padding-left: 0; border-left: none; margin-top: 30px; padding-top: 30px; border-top: 1px solid var(--border-color); }
+            .recommendation-flow { flex-direction: column; gap: 15px; }
+            .flow-arrow { transform: rotate(90deg); }
+            .section-title { font-size: 1.7rem; }
+            .total-budget-card .value { font-size: 2.8rem; }
+            .metric-card .value { font-size: 2.1rem; }
+        }
     </style>
 </head>
 <body>
@@ -199,6 +283,7 @@
                         <p>Achieve company-wide efficiency, accuracy, and data-driven growth for years to come.</p>
                     </div>
                 </div>
+                <a href="02_Trial_Project_SCM.html" class="continue-button">Continue to Trial Project (SCM) &rarr;</a>
             </div>
         </div>
 
@@ -208,15 +293,78 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- NEW: Guided Path Navigation Setup ---
+            const pages = [
+                'index.html', // or the full name '01_Executive_Summary.html' if you use that
+                '02_Trial_Project_SCM.html',
+                '03_Company_Rollout.html',
+                '04_AI_Tools_Budget.html'
+            ];
+            // Find the current page's name and its index in the array
+            const pathParts = window.location.pathname.split('/');
+            const currentPageName = pathParts.pop() || 'index.html'; // Handles cases where the path ends with a slash
+            const currentPageIndex = pages.findIndex(p => p.includes(currentPageName));
+
             // --- Slide Navigation ---
             const slides = document.querySelectorAll('.slide');
             const indicator = document.querySelector('.slide-indicator');
-            let currentSlide = 0; let isNavigating = false; const navigationTimeout = 600;
-            function showSlide(index) { slides.forEach(s => s.classList.remove('active')); slides[index].classList.add('active'); indicator.textContent = `Page ${index+1} of ${slides.length}`; }
-            function nextSlide() { currentSlide = (currentSlide + 1) % slides.length; showSlide(currentSlide); }
-            function prevSlide() { currentSlide = (currentSlide - 1 + slides.length) % slides.length; showSlide(currentSlide); }
-            document.addEventListener('keydown', (e) => { if (isNavigating) return; isNavigating = true; if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide(); else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide(); setTimeout(() => { isNavigating = false; }, navigationTimeout); });
-            document.addEventListener('wheel', (e) => { const card = e.target.closest('.slide-content-wrapper'); if (card && card.scrollHeight > card.clientHeight) return; if (isNavigating) return; isNavigating = true; if (e.deltaY > 0) nextSlide(); else prevSlide(); setTimeout(() => { isNavigating = false; }, navigationTimeout); }, { passive: false });
+            let currentSlide = 0; 
+            let isNavigating = false; 
+            const navigationTimeout = 600;
+
+            function showSlide(index) {
+                slides.forEach(s => s.classList.remove('active'));
+                slides[index].classList.add('active');
+                indicator.textContent = `Page ${index + 1} of ${slides.length}`;
+            }
+
+            // --- NEW: Updated nextSlide function ---
+            function nextSlide() {
+                // If we are not on the last slide, just show the next one
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                } else {
+                    // If we ARE on the last slide, navigate to the next page in the `pages` array
+                    if (currentPageIndex < pages.length - 1) {
+                        window.location.href = pages[currentPageIndex + 1];
+                    }
+                    // Optional: loop back to the first page from the end
+                    // else { window.location.href = pages[0]; }
+                }
+            }
+
+            // --- NEW: Updated prevSlide function ---
+            function prevSlide() {
+                // If we are not on the first slide, just show the previous one
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                } else {
+                    // If we ARE on the first slide, navigate to the previous page
+                    if (currentPageIndex > 0) {
+                        window.location.href = pages[currentPageIndex - 1];
+                    }
+                }
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (isNavigating) return;
+                isNavigating = true;
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+                else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+                setTimeout(() => { isNavigating = false; }, navigationTimeout);
+            });
+
+            document.addEventListener('wheel', (e) => {
+                const card = e.target.closest('.slide-content-wrapper');
+                if (card && card.scrollHeight > card.clientHeight) return; // Allow internal scrolling
+                if (isNavigating) return;
+                isNavigating = true;
+                if (e.deltaY > 0) nextSlide();
+                else prevSlide();
+                setTimeout(() => { isNavigating = false; }, navigationTimeout);
+            }, { passive: false });
 
             // --- Dashboard Logic ---
             const formatCurrency = (num) => `$${num.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
@@ -226,7 +374,7 @@
                 const target = parseFloat(el.dataset.target);
                 if (isNaN(target)) { el.textContent = formatCurrency(0); return; }
                 let frame = 0;
-                const totalFrames = 90; // Approx 1.5 seconds
+                const totalFrames = 90;
                 const easeOutExpo = t => t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
                 function update() {
                     frame++;
@@ -332,5 +480,4 @@
         });
     </script>
 </body>
-
 </html>
