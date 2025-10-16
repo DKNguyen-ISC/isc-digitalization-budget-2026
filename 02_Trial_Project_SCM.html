@@ -35,20 +35,46 @@
 
         /* --- NAVIGATION BAR --- */
         .navbar {
-            position: fixed; top: 0; left: 0; width: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            border-bottom: 1px solid var(--card-border);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 0 5%; height: 70px; z-index: 1000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--primary-gradient); /* Use the main theme gradient */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); /* A slightly stronger shadow for depth */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            height: 70px;
+            z-index: 1000;
+            border-bottom: none; /* No longer needed with the solid background */
+        }
+        .navbar .nav-logo,
+        .navbar .nav-links a {
+            color: white;
+            -webkit-text-fill-color: white; /* This overrides the gradient color on your logo */
         }
         .nav-logo { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 600; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
         .nav-links { list-style: none; display: flex; gap: 40px; }
-        .nav-links a { text-decoration: none; color: var(--heading-color); font-weight: 500; font-family: 'Poppins', sans-serif; font-size: 1rem; position: relative; padding: 5px 0; transition: color 0.3s ease; }
-        .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px; background: var(--primary-gradient); transition: width 0.3s ease; }
-        .nav-links a:hover, .nav-links a.active { color: var(--secondary-color); }
-        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            position: relative;
+            padding: 8px 18px; /* Add padding to create space for the pill */
+            border-radius: 20px; /* Rounded corners for the pill */
+            transition: background-color 0.3s ease;
+        }
+        .nav-links a:hover,
+        .nav-links a.active {
+            background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+        }
+        .nav-links a::after {
+            display: none;
+        }
         .nav-links a.disabled { color: #b0b0b0; pointer-events: none; }
 
         /* --- SLIDE SYSTEM --- */
@@ -78,9 +104,7 @@
         #usage-group h3 { color: var(--secondary-color); }
 
         .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        /* -- NEW -- Grid span for longer inputs */
         .grid-span-2 { grid-column: 1 / -1; }
-
         .calc-input { display: flex; flex-direction: column; }
         .calc-input label, .calc-output label { font-size: 0.9rem; font-weight: 500; color: var(--secondary-color); margin-bottom: 5px; }
         .calc-input input { padding: 10px; border: 1px solid #e2e8f0; border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 1rem; width: 100%; box-shadow: inset 0 2px 4px rgba(0,0,0,0.06); transition: border-color 0.3s ease, box-shadow 0.3s ease; }
@@ -113,7 +137,6 @@
         #calculate-btn.success .check { display: inline-block; font-size: 1.5rem; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* -- NEW -- Cost Breakdown Table Styles */
         .cost-table .main-row td { font-weight: bold; background-color: #f8fafc; color: var(--heading-color); }
         .cost-table .sub-row td { padding-left: 40px; color: var(--text-color); }
         .cost-table .sub-row td:first-child::before { content: "↳"; margin-right: 10px; color: #9ca3af; }
@@ -121,7 +144,6 @@
         .cost-table .net-cost-row td { border-top: 1px solid #e2e8f0; font-weight: bold; background-color: #f8fafc; }
         .cost-table .grand-total-row td { background: var(--secondary-color); color: white; font-size: 1.2rem; font-weight: bold; font-family: 'Poppins', sans-serif; }
         
-        /* -- NEW -- Financial Summary Styles */
         .summary-card { text-align: center; background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 10px 30px var(--shadow-color); }
         .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; text-align: left; }
         .summary-item { display: flex; align-items: center; gap: 20px; padding: 25px; border-radius: 15px; background: #f7f9fc; border: 1px solid #eef2ff; }
@@ -134,6 +156,46 @@
         .total-summary { grid-column: 1 / -1; margin-top: 20px; padding: 25px; border-radius: 15px; background: var(--primary-gradient); color: white; text-align: center; }
         .total-summary .label { font-size: 1.2rem; opacity: 0.9; }
         .total-summary .value { font-family: 'Poppins', sans-serif; font-size: 3.2rem; font-weight: 700; color: white; }
+
+        .continue-button {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 24px;
+            background: var(--primary-gradient);
+            color: white;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            border-radius: 25px;
+            box-shadow: 0 8px 15px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+        .continue-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* --- RESPONSIVE DESIGN STYLES --- */
+        @media (max-width: 1024px) {
+            .slide-content-card { padding: 30px; }
+            .nav-links { gap: 25px; }
+        }
+
+        @media (max-width: 768px) {
+            body { height: auto; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+            .navbar { height: auto; padding: 10px 15px; flex-direction: column; }
+            .nav-links { margin-top: 10px; flex-wrap: wrap; justify-content: center; gap: 10px 20px; }
+            .nav-links a { font-size: 0.9rem; }
+            .slides-container { margin-top: 110px; height: auto; perspective: none; }
+            .slide { position: relative; height: auto; opacity: 1; transform: none; visibility: visible; display: block; padding: 15px; margin-bottom: 30px; }
+            .slide:not(.active) { display: none; }
+            .slide-content-card { padding: 20px; max-height: none; }
+            .slide-indicator { display: none; }
+            .calculator-layout, .summary-grid { grid-template-columns: 1fr; }
+            .section-title { font-size: 1.7rem; }
+            .summary-text .value { font-size: 2rem; }
+            .total-summary .value { font-size: 2.5rem; }
+        }
     </style>
 </head>
 <body>
@@ -347,6 +409,7 @@
                             <div class="value" data-final-value="0" id="summary-total-cost">$0.00</div>
                         </div>
                     </div>
+                    <a href="03_Company_Rollout.html" class="continue-button">Continue to Company-Wide Rollout &rarr;</a>
                 </div>
             </div>
         </div>
@@ -356,6 +419,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- Guided Path Navigation Setup ---
+            const pages = [
+                'index.html',
+                '02_Trial_Project_SCM.html',
+                '03_Company_Rollout.html',
+                '04_AI_Tools_Budget.html'
+            ];
+            const pathParts = window.location.pathname.split('/');
+            const currentPageName = pathParts.pop() || 'index.html';
+            const currentPageIndex = pages.findIndex(p => p.includes(currentPageName));
+
+            // --- Slide Navigation ---
             const slides = document.querySelectorAll('.slide');
             const indicator = document.querySelector('.slide-indicator');
             const calculateBtn = document.getElementById('calculate-btn');
@@ -379,21 +454,16 @@
                 const avgInitialRows = parseFormattedNumber(document.getElementById('avg-initial-rows').value);
                 const avgMonthlyGrowthRows = parseFormattedNumber(document.getElementById('avg-monthly-growth-rows').value);
                 const queryMultiplier = parseFormattedNumber(document.getElementById('query-multiplier').value);
-                
                 const AVG_BYTES_PER_CELL = 50; 
-                
                 const calculatedRowSizeBytes = numCols * AVG_BYTES_PER_CELL;
                 const calculatedRowSizeKB = calculatedRowSizeBytes / 1024;
                 document.getElementById('row-size-kb').textContent = `${calculatedRowSizeKB.toFixed(2)} KB`;
-
                 const initialRows = avgInitialRows * numTables;
                 const monthlyGrowthRows = avgMonthlyGrowthRows * numTables;
                 const initialStorageGB = (initialRows * calculatedRowSizeBytes) / (1024**3);
                 const monthlyGrowthGB = (monthlyGrowthRows * calculatedRowSizeBytes) / (1024**3);
-                
                 const totalMonthlyStorageGB = initialStorageGB + monthlyGrowthGB;
                 document.getElementById('total-data-size-gb').textContent = `${totalMonthlyStorageGB.toFixed(4)} GB`;
-                
                 const monthlyQueriesGB = totalMonthlyStorageGB * queryMultiplier;
                 document.getElementById('calculated-scanned-gb').textContent = `${monthlyQueriesGB.toFixed(2)} GB`;
             }
@@ -405,81 +475,60 @@
                 const avgInitialRows = parseFormattedNumber(document.getElementById('avg-initial-rows').value);
                 const avgMonthlyGrowthRows = parseFormattedNumber(document.getElementById('avg-monthly-growth-rows').value);
                 const queryMultiplier = parseFormattedNumber(document.getElementById('query-multiplier').value);
-                
                 const initialRows = avgInitialRows * numTables;
-                const monthlyGrowthRows = avgMonthlyGrowthRows * numTables;
-                
                 const AVG_BYTES_PER_CELL = 50;
                 const calculatedRowSizeBytes = numCols * AVG_BYTES_PER_CELL;
-                
                 const STORAGE_PRICE_PER_GB_MONTH = 0.02;
                 const QUERY_PRICE_PER_TB = 6.25;
                 const FREE_STORAGE_GB = 10;
                 const FREE_QUERY_TB = 1;
-
                 const initialStorageGB = (initialRows * calculatedRowSizeBytes) / (1024**3);
                 const initialStorageMB = initialStorageGB * 1024;
-                const monthlyGrowthGB = (monthlyGrowthRows * calculatedRowSizeBytes) / (1024**3);
+                const monthlyGrowthGB = ((avgMonthlyGrowthRows * numTables) * calculatedRowSizeBytes) / (1024**3);
                 const totalMonthlyStorageGB = initialStorageGB + monthlyGrowthGB;
                 const monthlyQueriesGB = totalMonthlyStorageGB * queryMultiplier;
                 const monthlyQueriesTB = monthlyQueriesGB / 1024;
-                
-                // --- Detailed Cost Calculations ---
                 const grossStorageCost = totalMonthlyStorageGB * STORAGE_PRICE_PER_GB_MONTH;
                 const storageFreeTierCredit = Math.min(totalMonthlyStorageGB, FREE_STORAGE_GB) * STORAGE_PRICE_PER_GB_MONTH;
                 const netStorageCost = Math.max(0, grossStorageCost - storageFreeTierCredit);
-
                 const grossQueryCost = monthlyQueriesTB * QUERY_PRICE_PER_TB;
                 const queryFreeTierCredit = Math.min(monthlyQueriesTB, FREE_QUERY_TB) * QUERY_PRICE_PER_TB;
                 const netQueryCost = Math.max(0, grossQueryCost - queryFreeTierCredit);
-
                 const onboardingCost = 0;
                 const totalMonthlyPlatformCost = netStorageCost + netQueryCost;
 
-                // --- Onboarding Slide ---
                 document.getElementById('onboarding-rows-display').textContent = formatWithCommas(initialRows);
                 document.getElementById('onboarding-tables-display').textContent = formatWithCommas(numTables);
                 document.getElementById('onboarding-size-display').textContent = `~${initialStorageMB.toFixed(2)} MB`;
                 document.getElementById('onboarding-cost').textContent = formatCurrency(onboardingCost);
-
-                // --- Monthly Cost Breakdown Slide ---
                 document.getElementById('storage-gross-calc').textContent = `(${totalMonthlyStorageGB.toFixed(4)} GB * ${formatCurrency(STORAGE_PRICE_PER_GB_MONTH)}/GB)`;
                 document.getElementById('storage-gross-cost').textContent = formatCurrency(grossStorageCost);
                 document.getElementById('storage-free-calc').textContent = `(${Math.min(totalMonthlyStorageGB, FREE_STORAGE_GB).toFixed(4)} of ${FREE_STORAGE_GB} GB free)`;
                 document.getElementById('storage-free-credit').textContent = `-${formatCurrency(storageFreeTierCredit)}`;
                 document.getElementById('storage-net-cost').textContent = formatCurrency(netStorageCost);
-                
                 document.getElementById('query-gross-calc').textContent = `(${monthlyQueriesTB.toFixed(5)} TB * ${formatCurrency(QUERY_PRICE_PER_TB)}/TB)`;
                 document.getElementById('query-gross-cost').textContent = formatCurrency(grossQueryCost);
                 document.getElementById('query-free-calc').textContent = `(${Math.min(monthlyQueriesTB, FREE_QUERY_TB).toFixed(5)} of ${FREE_QUERY_TB} TB free)`;
                 document.getElementById('query-free-credit').textContent = `-${formatCurrency(queryFreeTierCredit)}`;
                 document.getElementById('query-net-cost').textContent = formatCurrency(netQueryCost);
-                
                 document.getElementById('total-monthly-cost').textContent = formatCurrency(totalMonthlyPlatformCost);
-                
-                // --- Summary Slide (store final values in data attributes for animation) ---
                 document.getElementById('summary-onboarding-cost').dataset.finalValue = onboardingCost;
                 document.getElementById('summary-monthly-cost').dataset.finalValue = totalMonthlyPlatformCost;
                 document.getElementById('summary-total-cost').dataset.finalValue = onboardingCost + totalMonthlyPlatformCost;
                 localStorage.setItem('trial_monthly_cost', totalMonthlyPlatformCost);
             }
 
-            // NEW: Count-up animation for summary slide
             function animateCountUp(el) {
                 const endValue = parseFloat(el.dataset.finalValue);
                 if (isNaN(endValue)) return;
-
-                const duration = 1200; // ms
+                const duration = 1200;
                 let startTimestamp = null;
                 const step = (timestamp) => {
                     if (!startTimestamp) startTimestamp = timestamp;
                     const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                    const current = progress * endValue;
-                    el.textContent = formatCurrency(current);
+                    el.textContent = formatCurrency(progress * endValue);
                     if (progress < 1) {
                         window.requestAnimationFrame(step);
-                    } else {
-                        el.textContent = formatCurrency(endValue); // Ensure final value is exact
                     }
                 };
                 window.requestAnimationFrame(step);
@@ -489,22 +538,34 @@
                 slides.forEach(slide => slide.classList.remove('active'));
                 slides[index].classList.add('active');
                 indicator.textContent = `${index + 1} / ${slides.length}`;
-
-                // If the summary slide is now active, trigger the animations
                 if (index === 3) {
-                    document.getElementById('summary-onboarding-cost').textContent = '$0.00';
-                    document.getElementById('summary-monthly-cost').textContent = '$0.00';
-                    document.getElementById('summary-total-cost').textContent = '$0.00';
-                    
-                    setTimeout(() => {
-                        animateCountUp(document.getElementById('summary-onboarding-cost'));
-                        animateCountUp(document.getElementById('summary-monthly-cost'));
-                        animateCountUp(document.getElementById('summary-total-cost'));
-                    }, 100); // Small delay to ensure the slide is visible
+                    animateCountUp(document.getElementById('summary-onboarding-cost'));
+                    animateCountUp(document.getElementById('summary-monthly-cost'));
+                    animateCountUp(document.getElementById('summary-total-cost'));
                 }
             }
-            function nextSlide() { currentSlide = (currentSlide + 1) % slides.length; showSlide(currentSlide); }
-            function prevSlide() { currentSlide = (currentSlide - 1 + slides.length) % slides.length; showSlide(currentSlide); }
+
+            function nextSlide() {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                } else {
+                    if (currentPageIndex < pages.length - 1) {
+                        window.location.href = pages[currentPageIndex + 1];
+                    }
+                }
+            }
+
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                } else {
+                    if (currentPageIndex > 0) {
+                        window.location.href = pages[currentPageIndex - 1];
+                    }
+                }
+            }
 
             calculateBtn.addEventListener('click', () => {
                 if (calculateBtn.classList.contains('calculating')) return;
@@ -519,6 +580,7 @@
                     }, 800);
                 }, 500);
             });
+
             document.addEventListener('keydown', (e) => {
                 if (document.activeElement.tagName === 'INPUT' && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) return;
                 if (isNavigating) return;
@@ -527,6 +589,7 @@
                 else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
                 setTimeout(() => { isNavigating = false; }, navigationTimeout);
             });
+            
             document.addEventListener('wheel', (e) => {
                 const card = e.target.closest('.slide-content-card');
                 if (card && card.scrollHeight > card.clientHeight) return;
